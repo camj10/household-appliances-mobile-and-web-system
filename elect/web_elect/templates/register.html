@@ -1,0 +1,36 @@
+<!-- templates/register.html -->
+
+<form id="registerForm" method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+    
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+    
+    <label for="usuario">Usuario:</label><br>
+    <input type="text" id="usuario" name="usuario" required><br><br>
+    
+    <label for="clave">Clave:</label><br>
+    <input type="password" id="clave" name="clave" required><br><br>
+    
+    <label for="telefono">Teléfono:</label><br>
+    <input type="text" id="telefono" name="telefono" required><br><br>
+    
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+    
+    <label for="direccion">Dirección:</label><br>
+    <input type="text" id="direccion" name="direccion" required><br><br>
+    
+    <label for="rol">Rol:</label><br>
+    <select id="rol" name="rol" required>
+        <option value="1">Funcionario</option>
+        <option value="2">Cliente</option>
+    </select><br><br>
+    
+    <label for="estado">Estado:</label><br>
+    <input type="text" id="estado" name="estado" required><br><br>
+    
+    <button type="submit">Register</button>
+</form>

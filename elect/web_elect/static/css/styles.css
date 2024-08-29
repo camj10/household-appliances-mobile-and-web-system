@@ -1,0 +1,30 @@
+
+.form-container {
+    background-color: #FFFFFF; /* Fondo del formulario */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-group label {
+    color: rgb(81, 81, 81); /* Color de etiquetas */
+    font-weight: bold;
+}
+
+
+.btn-secondary {
+    background-color: #2966E9; /* Color de fondo del botón */
+    border-color: #2d1d96; /* Color del borde del botón */
+    border: 2px solid #808080; /* Color del borde gris */
+    border-radius: 20px; /* Ajusta el radio de borde para hacerlo más redondeado */
+    padding: 10px 20px; /* Ajusta el padding para un tamaño más cómodo */
+}
+.btn-block:hover {
+    background-color: #483d8b; /* Color de fondo al pasar el ratón */
+    border-color: #483d8b; /* Color del borde al pasar el ratón */
+}

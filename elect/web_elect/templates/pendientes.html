@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5" style="background-color: white">
+    <h1>Pedidos Pendientes</h1>
+    <form method="get" class="form-inline mb-3">
+        <label for="orden" class="mr-2">Ordenar por fecha de solicitud:</label>
+        <select name="orden" id="orden" class="form-control mr-2">
+            <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Ascendente</option>
+            <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Descendente</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cantidad Cuotas</th>
+                <th>Precio Cuota</th>
+                <th>Usuario Cliente</th>
+                <th>Producto</th>
+                <th>Estado</th>
+                <th>Aprobar</th>
+                <th>Rechazar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in n_pedidos %}
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <td>{{ pedido.fecha }}</td>
+                <td>{{ pedido.cantidad_cuotas }}</td>
+                <td>{{ pedido.precio_cuota }}</td>
+                <td>{{ pedido.usuario_cliente.username }}</td>
+                <td>{{ pedido.producto.descripcion }}</td>
+                <td>{{ pedido.estado }}</td>
+                <td>
+                    <button class="btn btn-success" onclick="aprobarPedido({{ pedido.id }})">Aprobar y generar cuotas</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" onclick="rechazarPedido({{ pedido.id }})">Eliminar pedido</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10">No hay pedidos pendientes.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function aprobarPedido(pedidoId) {
+        fetch(`/aprobarpedido/${pedidoId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                action: 'approve'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();  // Recargar la página para ver los cambios
+            } else {
+                alert('Error al aprobar el pedido');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function rechazarPedido(pedidoId) {
+        fetch(`/desaprobarpedido/${pedidoId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                action: 'reject'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();  // Recargar la página para ver los cambios
+            } else {
+                alert('Error al rechazar el pedido');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

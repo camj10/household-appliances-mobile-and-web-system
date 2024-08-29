@@ -1,0 +1,10 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+#carpetas
+/elect/web_elect/media/imagenes
+/elect/web_elect/migrations
+/elect/web_elect/__pycache__
+/elect/elect/__pycache__

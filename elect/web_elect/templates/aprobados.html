@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="background-color: white">
+    <h2>Aprobados</h2>
+    <form method="get" class="form-inline mb-3">
+        <label for="orden" class="mr-2">Ordenar por fecha de aprobación:</label>
+        <select name="orden" id="orden" class="form-control mr-2">
+            <option value="asc" {% if orden == 'asc' %}selected{% endif %}>Ascendente</option>
+            <option value="desc" {% if orden == 'desc' %}selected{% endif %}>Descendente</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+    <table class="table table-striped" style="background-color: white">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Fecha Primera Cuota</th>
+                <th>Cantidad de Cuotas</th>
+                <th>Precio Cuota</th>
+                <th>Usuario Cliente</th>
+                <th>Producto</th>
+                <th>Estado</th>
+                <th>Fecha Aprobado</th>
+                <th>Calendario</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in n_pedidos %}
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <td>{{ pedido.fecha }}</td>
+                <td>{{ pedido.fecha_primera_cuota }}</td>
+                <td>{{ pedido.cantidad_cuotas }}</td>
+                <td>{{ pedido.precio_cuota }}</td>
+                <td>{{ pedido.usuario_cliente.username }}</td>
+                <td>{{ pedido.producto.descripcion }}</td>
+                <td>{{ pedido.estado }}</td>
+                <td>{{ pedido.fecha_aprobado }}</td>
+                <td>
+                    <a href="{% url 'vercuotas' pedido.id %}" class="btn btn-info">Ver Cuotas</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

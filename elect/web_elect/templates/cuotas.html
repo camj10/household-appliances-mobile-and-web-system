@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="background-color: white">
+    <h2>Cuotas del Pedido {{ pedido }}</h2>
+    
+    <form id="filter-form">
+        <div class="form-group">
+            <label for="estado_pago">Filtrar por Estado de Pago:</label>
+            <select id="estado_pago" name="estado_pago" class="form-control">
+                <option value="">Todos</option>
+                <option value="0" {% if request.GET.estado_pago == '0' %}selected{% endif %}>No Pagado</option>
+                <option value="1" {% if request.GET.estado_pago == '1' %}selected{% endif %}>Pagado</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Tabla de cuotas -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número de Cuota</th>
+                <th>Precio de Cuota</th>
+                <th>Fecha de Vencimiento</th>
+                <th>Estado de Pago</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cuota in cuotas_list %}
+            <tr>
+                <td>{{ cuota.numero_cuota }}</td>
+                <td>{{ cuota.precio_cuota }}</td>
+                <td>{{ cuota.fecha_vencimiento }}</td>
+                <td>
+                    {% if cuota.estado_pago == '0' or cuota.estado_pago == 'NP' %}
+                        No Pagado
+                    {% elif cuota.estado_pago == '1' %}
+                        Pagado
+                    {% endif %}
+                </td>
+                <td>
+                    {% if cuota.estado_pago == '0' or cuota.estado_pago == 'NP' %}
+                        <button onclick="confirmarPago({{ cuota.id }})" class="btn btn-success">Pagar</button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'veraprobadosfecha' %}" class="btn btn-primary">Volver a Pedidos Aprobados</a>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('estado_pago').addEventListener('change', function() {
+    const estado_pago = this.value;
+    const url = new URL(window.location.href);
+    url.searchParams.set('estado_pago', estado_pago);
+    window.location.href = url.toString();
+});
+
+function confirmarPago(cuotaId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Deseas marcar esta cuota como pagada?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, pagar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+    
+            const csrftoken = getCookie('csrftoken');
+
+            fetch(`{% url 'pagarcuota' cuota_id=0 %}`.replace('0', cuotaId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ 'cuota_id': cuotaId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire(
+                        'Pagado!',
+                        'La cuota ha sido marcada como pagada.',
+                        'success'
+                    ).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'Hubo un problema al marcar la cuota como pagada.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+</script>
+{% endblock %}
+{% endblock %}

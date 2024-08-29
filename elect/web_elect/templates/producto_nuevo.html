@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-100 m-0">
+  <div class="col-md-7 p-0">
+      <div class="form-container m-0">
+          <h4 class="form-heading text-center mb-1 p-0">Nuevo producto</h4>
+          <div>
+              <form id="login-form" action="{% url 'nueproducto' %}" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group m-1">
+                    <label>Descripcion:</label>
+                    <input type="text" name="descripcion" class="form-control">
+                  </div>
+                  <div class="form-group m-1">
+                    <label>Stock:</label>                
+                    <textarea id="stock" name="stock" class="form-control p-0 m-0"></textarea>
+                  </div>
+                  <div class="form-group m-1">
+                    <label>Precio total del producto:</label>                
+                    <textarea id="precio_total" name="precio_total" class="form-control p-0"></textarea>
+                  </div>
+                  <div class="form-group m-1">
+                    <label>Cantidad cuotas:</label>                
+                    <textarea id="cantidad_cuotas" name="cantidad_cuotas" class="form-control p-0"></textarea>
+                  </div>
+                  <div class="form-group m-1">
+                    <label>Marca:</label>                
+                    <select id="marca" name="marca" class="form-control p-1">
+                        {% for marca in n_marcas %}
+                            <option value="{{ marca.id }}">{{ marca.descripcion }}</option>
+                        {% endfor %}
+                    </select> 
+                  </div>
+                  <div class="form-group m-1">
+                    <label>Imagen:</label>
+                    <input type="file" id="imagen" class="form-control p-1" name="imagen" required>
+                  </div>
+                  <button type="submit" class="btn btn-secondary btn-block">Guardar</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

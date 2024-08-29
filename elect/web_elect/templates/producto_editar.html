@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="untree_co-section pb-0">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-lg-7 text-center mx-auto">
+          <h2 class="section-heading gsap-reveal-hero mb-0"><strong>Modificar Producto</strong></h2>
+          <div class="wave gsap-reveal-hero" >
+            <svg>
+              <path d="M10,10 L50,100 L90,50" stroke="white"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <form method="post" action="{% url 'modproducto' producto.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="form-group">
+                    <label for="descripcion">Descripcion:</label>
+                    <input type="text" id="descripcion" name="descripcion" value="{{ producto.descripcion }}" class="form-control">
+                </div>
+                <div class="form-group">
+                        <label>marca:</label>                
+                        <select id="marca" name="marca" class="form-control">
+                            {% for marca in n_marcas %}
+                            <option value="{{ marca.id }}" {% if marca == producto.marca %} selected {% endif %}>{{ marca.descripcion }}</option>
+                            {% endfor %}
+                        </select> 
+                    
+                </div>
+                <div class="form-group">
+                    <label>Stock:</label>                
+                    <textarea id="stock" name="stock" class="form-control">{{ producto.stock }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Precio total:</label>                
+                    <textarea id="precio_total" name="precio_total" class="form-control">{{ producto.precio_total }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Cantidad cuotas:</label>                
+                    <textarea id="cantidad_cuotas" name="cantidad_cuotas" class="form-control">{{ producto.cantidad_cuotas }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Precio cuota:</label>                
+                    <textarea id="precio_cuota" name="precio_cuota" class="form-control">{{ producto.precio_cuota }}</textarea>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 form-group">
+                        <label>Imagen:</label>
+                        <input type="file" id="imagen" name="imagen"><br>
+                        {% if producto.imagen %}
+                          <p>Imagen actual: <img src="/media/imagenes/{{ producto.imagen }}" alt="Imagen actual de {{ producto.titulo }}" style="max-width: 200px;"></img>
+                        {% endif %}
+                      </div>
+                    
+                </div>
+                  <div class="row">
+                    <div class="col-12 form-group">
+                      <input type="submit" class="btn btn-black" value="Guardar Cambios">
+                    </div>
+                <!-- Otros campos y botones de formulario aquí -->
+            </form>
+            
+        </div>
+        
+      </div>
+    </div>
+  </div>
+{% endblock %}
